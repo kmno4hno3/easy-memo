@@ -12,8 +12,8 @@ ENV APP_ROOT /app
 WORKDIR $APP_ROOT
 
 # ホストのGemfileとGemfile.lockをコンテナにコピー
-ADD ./Gemfile $APP_ROOT/Gemfile
-ADD ./Gemfile.lock $APP_ROOT/Gemfile.lock
+ADD ./api/Gemfile $APP_ROOT/Gemfile
+ADD ./api/Gemfile.lock $APP_ROOT/Gemfile.lock
 
 RUN bundle install
 
