@@ -1,37 +1,63 @@
 version: '3'
 services:
   web:
-      build: ./api
-      command: bundle exec rails s -p 3000 -b '0.0.0.0'
-      ports:
-        - '3000:3000'
-      depends_on:
-        - db
-      volumes:
-        - ./api:/app
-        - bundle:/usr/local/bundle
-      tty: true
-      stdin_open: true
+    build:
+      context: .
+      dockerfile: ./api/Dockerfile
+    # command: bundle exec rails s -p 3000 -b '0.0.0.0'
+    env_file:
+      - ./api/environments/db.env
+    command: bundle exec puma -C config/puma.rb
+    ports:
+      - '3000:3000'
+    depends_on:
+      - db
+    volumes:
+      - ./api:/app
+      - bundle:/usr/local/bundle
+      # - public-data:/app/public 多分いらない
+      - tmp-data:/app/tmp
+      - log-data:/app/log
+    tty: true # ポート待ち受けにしてない場合でもコンテナが終了しないように
+    stdin_open: true # ttyとセット
       
-    db:
-      image: mysql:5.7
-      volumes:
-        - mysql_data:/var/lib/mysql/
-      environment:
-        MYSQL_ROOT_PASSWORD: password
-      ports:
-        - '3306:3306'
+  db:
+    image: mysql:5.7
+    env_file:
+      - ./api/environments/db.env
+    volumes:
+      - db-data:/var/lib/mysql
+    # environment:
+    #   MYSQL_ROOT_PASSWORD: password
+    ports:
+      - '3306:3306'
 
   nginx:
-    build: ./nginx
+    build:
+      context: .
+      dockerfile: ./nginx/Dockerfile
     ports:
       - '9000:80'
     volumes:
       - ./data/www:/var/www/html
-      - ./nginx/server.conf:/etc/nginx/nginx.conf
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      # - public-data:/webapp/public
+      # - tmp-data:/webapp/tmp
+    tty: true
+    stdin_open: true
+    # command: npm run serve
+    depends_on: wep
 
   vue:
-    build: ./vue
+    build:
+      context: .
+      dockerfile: /vue
     volumes:
       - ./data/www:/app
     tty: true
+
+volumes:
+  # public-data:
+  tmp-data:
+  log-data:
+  db-data:
