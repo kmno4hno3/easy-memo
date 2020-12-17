@@ -49,7 +49,7 @@ services:
   vue:
     build:
       context: .
-      dockerfile: /vue
+      dockerfile: ./vue/Dockerfile
     volumes:
       - ./data/www:/app
     tty: true
