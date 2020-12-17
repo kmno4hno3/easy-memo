@@ -19,8 +19,7 @@ services:
       - tmp-data:/app/tmp
       - log-data:/app/log
     tty: true # ポート待ち受けにしてない場合でもコンテナが終了しないように
-    stdin_open: true # ttyとセット
-      
+    stdin_open: true # ttyとセット  
   db:
     image: mysql:5.7
     env_file:
@@ -31,7 +30,6 @@ services:
     #   MYSQL_ROOT_PASSWORD: password
     ports:
       - '3306:3306'
-
   nginx:
     build:
       context: .
@@ -46,8 +44,8 @@ services:
     tty: true
     stdin_open: true
     # command: npm run serve
-    depends_on: wep
-
+    depends_on:
+      - web
   vue:
     build:
       context: .
@@ -55,9 +53,9 @@ services:
     volumes:
       - ./data/www:/app
     tty: true
-
 volumes:
   # public-data:
+  bundle:
   tmp-data:
   log-data:
   db-data:
