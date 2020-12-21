@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: ./api/Dockerfile
     env_file:
-      - ./api/environments/db.env
+      - ./environments/db.env
     command: bundle exec puma -C config/puma.rb
     ports:
       - '3000:3000'
@@ -21,7 +21,7 @@ services:
   db:
     image: mysql:5.7
     env_file:
-      - ./api/environments/db.env
+      - ./environments/db.env
     volumes:
       - db-data:/var/lib/mysql
     ports:
