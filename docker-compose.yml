@@ -4,7 +4,6 @@ services:
     build:
       context: .
       dockerfile: ./api/Dockerfile
-    # command: bundle exec rails s -p 3000 -b '0.0.0.0'
     env_file:
       - ./api/environments/db.env
     command: bundle exec puma -C config/puma.rb
@@ -15,7 +14,6 @@ services:
     volumes:
       - ./api:/app
       - bundle:/usr/local/bundle
-      # - public-data:/app/public 多分いらない
       - tmp-data:/app/tmp
       - log-data:/app/log
     tty: true # ポート待ち受けにしてない場合でもコンテナが終了しないように
@@ -26,8 +24,6 @@ services:
       - ./api/environments/db.env
     volumes:
       - db-data:/var/lib/mysql
-    # environment:
-    #   MYSQL_ROOT_PASSWORD: password
     ports:
       - '3306:3306'
   nginx:
@@ -39,11 +35,9 @@ services:
     volumes:
       - ./data/www:/var/www/html
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-      # - public-data:/webapp/public
-      # - tmp-data:/webapp/tmp
+      - tmp-data:/app/tmp
     tty: true
     stdin_open: true
-    # command: npm run serve
     depends_on:
       - web
   vue:
@@ -54,7 +48,6 @@ services:
       - ./data/www:/app
     tty: true
 volumes:
-  # public-data:
   bundle:
   tmp-data:
   log-data:
