@@ -1,6 +1,6 @@
 version: '3'
 services:
-  web:
+  backend:
     build:
       context: .
       dockerfile: ./api/Dockerfile
@@ -39,7 +39,7 @@ services:
     tty: true
     stdin_open: true
     depends_on:
-      - web
+      - backend
   vue:
     build:
       context: .
