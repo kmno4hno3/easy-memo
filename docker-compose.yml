@@ -52,7 +52,7 @@ services:
     volumes:
       - ./vue:/app
     tty: true
-    # command: sh -c "cd assets && npm install && npm run serve" # ここのコメントアウトを外す。
+    command: sh -c "cd assets && npm install && npm run serve" # ここのコメントアウトを外す。
 volumes:
   bundle:
   tmp-data:
