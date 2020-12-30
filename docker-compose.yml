@@ -51,6 +51,7 @@ services:
        - '8080:8080'
     volumes:
       - ./vue:/app
+    stdin_open: true
     tty: true
     command: sh -c "cd assets && npm install && npm run serve" # ここのコメントアウトを外す。
 volumes:
