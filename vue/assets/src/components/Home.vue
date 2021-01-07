@@ -16,7 +16,7 @@ export default {
   },
   methods: {
     async getAccountData() {
-      const result = await axios.get("/api/account").catch((e) => {
+      const result = await axios.get("/api/v1/user").catch((e) => {
         console.error(e);
       });
 

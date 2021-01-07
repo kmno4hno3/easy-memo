@@ -1,11 +1,12 @@
 <template>
-  <div class="login">
-    login
+  <div class="new">
+    新規登録
     <div>
       <div>{{ this.message }}</div>
-      <input type="text" v-model="email" placeholder="NAME" /><br />
-      <input type="text" v-model="password" placeholder="PASSWORD" /><br />
-      <button v-on:click="login()">LOGIN</button>
+      <input type="text" v-model="name" placeholder="名前" /><br />
+      <input type="text" v-model="email" placeholder="メールアドレス" /><br />
+      <input type="text" v-model="password" placeholder="パスワード" /><br />
+      <button v-on:click="signup() ">新規登録</button>
     </div>
   </div>
 </template>
@@ -18,17 +19,19 @@ export default {
   name: "logIn",
   data(){
     return {
+      name: "",
       email: "",
       password: "",
       message: "",
     };
   },
   methods: {
-    async login(){
-      // const self = this;
+    // 新規登録
+    async signup() {
       const result = await axios
-        .post("/api/login",{
-          account: {
+        .post("/api/v1/users",{
+          user: {
+            name: this.name,
             email: this.email,
             password: this.password,
           },
@@ -41,6 +44,7 @@ export default {
         .catch((e) => {
           console.error(e);
         });
+        console.log(result);
       if (!result){
         this.message = "エラー";
         return;
@@ -50,7 +54,7 @@ export default {
         return;
       }
 
-      if(result.data.state){
+      if(result.status){
         // 結果を基にページ遷移
         this.$router.push("/home");
       }
