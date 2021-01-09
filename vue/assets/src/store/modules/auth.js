@@ -1,5 +1,5 @@
 export default {
-  namaspaced: true,
+  namespaced: true,
   // 状態(データの定義)
   state: {
     tenant: '',
@@ -14,7 +14,7 @@ export default {
       state.userId = data.user_id
     },
     // 
-    destroy(state, data) {
+    destroy(state) {
       state.tenant = ''
       state.token = ''
       state.userId = ''
@@ -23,6 +23,7 @@ export default {
   // mutationsをコミットする
   actions: {
     create({ commit, dispatch }, data) {
+      console.log("auth");
       dispatch(
         'http/post',
         { url: '/auth', data, error: 'message.unauthorized' },
@@ -38,7 +39,8 @@ export default {
       ).then(res => commit('create', res.data))
         .catch(err => err)
         // logout anyway ...
-        .finally(res => commit('destroy'))
+        // .finally(res => commit('destroy'))
+        .finally(commit('destroy'))
     }
   }
 }

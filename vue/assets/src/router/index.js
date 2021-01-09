@@ -2,12 +2,12 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 
 // 単一コンポーネント読み込み
-import index from "../components/Index.vue";
-import login from "../components/Login.vue";
-import home from "../components/Home.vue";
-import sigunup from "../components/New.vue";
+import index from "@/components/Index.vue";
+import login from "@/components/Login.vue";
+import home from "@/components/Home.vue";
+import sigunup from "@/components/New.vue";
 
-import store from "../store/index.js"
+import store from "@/store/index.js"
 
 // プラグインを使用
 Vue.use(VueRouter);
@@ -45,7 +45,7 @@ const routes = [
 const router = new VueRouter({
   mode: "history", // URLに#が入らない,etc...
   base: process.env.BASE_URL, // ベースとなるURLを設定(デフォルトは「/」)
-  routes,
+  routes: routes,
 });
 
 router.beforeEach((to, from, next) => {

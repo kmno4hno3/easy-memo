@@ -3,13 +3,17 @@ import axios from 'axios'
 export default {
   namespaced: true,
   actions: {
-    async request({ dispatch, rootState }, { method, url, data, error }) {
+    async request({ rootState }, { method, url, data }) {
+      console.log(rootState);
         const headers = {}
         headers['Content-Type'] = 'application/json'
-        if(rootState,auth.token){
+        if(rootState.auth.token){
           headers['Authorization'] = `Token ${rootState.auth.token}`
           headers['User-Id'] = rootState.auth.userId
         }
+
+        console.log(`${process.env.API_URL}${url}`);
+        console.log(`${url}`);
 
         const options = {
           method,
@@ -21,15 +25,10 @@ export default {
 
         return axios(options)
           .then(res => res)
-          .catch(err => {
-            dispatch(
-              'message/create',
-              { error: error, err },
-              { root: true }
-            )
-          })
+          .catch(err => err)
       },
     async post ({ dispatch }, requests) {
+      console.log("http");
       requests.method = 'post'
       return dispatch('request', requests)
     },
