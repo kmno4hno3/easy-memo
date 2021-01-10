@@ -6,13 +6,13 @@ module Api
       # POST /api/v1/login
       def create
         # 送られてきたemailのユーザー情報を取得
-        @user = User.find_for_database_authentication(email: params[:email])
+        @user = User.find_for_database_authentication(email: user_param[:email])
         # emailがない場合
         return invalid_email unless @user
 
-        if @user.valid_password?(params[:password])
+        if @user.valid_password?(user_param[:password])
           # パスワードが正しい場合
-          sign_in :user, @user
+          p sign_in :user, @user
           render json: @user, serializer: SessionSerializer, root: nil
         else
           # パスワードが正しくない場合
@@ -32,6 +32,11 @@ module Api
       def invalid_password
         warden.custom_failure!
         render json: { error: t('invalid_password') }
+      end
+
+      private
+      def user_param
+        params.require(:user).permit(:email, :password)
       end
     end
   end

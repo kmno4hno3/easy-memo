@@ -45,11 +45,12 @@ const routes = [
 const router = new VueRouter({
   mode: "history", // URLに#が入らない,etc...
   base: process.env.BASE_URL, // ベースとなるURLを設定(デフォルトは「/」)
-  routes: routes,
+  routes,
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(page => page.meta.isPublic) || store.state.auth.token) {
+  console.log(store.state.auth.access_token);
+  if (to.matched.some(page => page.meta.isPublic) || store.state.auth.access_token) {
     // ログインが必要な画面 or ログイン済みの場合
     next()
   } else {

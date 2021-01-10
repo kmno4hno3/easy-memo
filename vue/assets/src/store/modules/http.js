@@ -4,7 +4,6 @@ export default {
   namespaced: true,
   actions: {
     async request({ rootState }, { method, url, data }) {
-      console.log(rootState);
         const headers = {}
         headers['Content-Type'] = 'application/json'
         if(rootState.auth.token){
@@ -12,12 +11,11 @@ export default {
           headers['User-Id'] = rootState.auth.userId
         }
 
-        console.log(`${process.env.API_URL}${url}`);
-        console.log(`${url}`);
+        console.log(rootState);
 
         const options = {
           method,
-          url: `${process.env.API_URL}${url}`,
+          url: `${url}`,
           headers,
           data,
           timeout: 15000
@@ -25,7 +23,10 @@ export default {
 
         return axios(options)
           .then(res => res)
-          .catch(err => err)
+          .catch(err => {
+            console.log("err");
+            console.log(err);
+          })
       },
     async post ({ dispatch }, requests) {
       console.log("http");

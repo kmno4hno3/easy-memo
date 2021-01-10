@@ -8,8 +8,8 @@ services:
     env_file:
       - ./environments/db.env
     command: bundle exec puma -C config/puma.rb
-    ports:
-      - '3000:3000'
+    # ports:
+    #   - '3000:3000'
     depends_on:
       - db
     volumes:

@@ -2,7 +2,6 @@
   <div class="login">
     login
     <div>
-      <!-- <div>{{ this.message }}</div> -->
       <input type="text" v-model="email" placeholder="メールアドレス" /><br />
       <input type="text" v-model="password" placeholder="パスワード" /><br />
       <button v-on:click="login()">LOGIN</button>
@@ -35,7 +34,12 @@ export default {
     token(){
       return this.$store.state.auth.token
     }
-  }
+  },
+  // watch: {
+  //   token () {
+  //     this.$router.push('/')
+  //   }
+  // }
 };
 </script>
 

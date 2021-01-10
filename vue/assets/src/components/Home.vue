@@ -19,6 +19,7 @@ export default {
       const result = await axios.get("/api/v1/user").catch((e) => {
         console.error(e);
       });
+      console.log("home");
 
       if(!result){
         // エラーの場合ログイン画面へ遷移させる
