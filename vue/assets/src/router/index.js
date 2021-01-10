@@ -4,8 +4,9 @@ import VueRouter from "vue-router";
 // 単一コンポーネント読み込み
 import index from "@/components/Index.vue";
 import login from "@/components/Login.vue";
+import logout from "@/components/Logout.vue";
 import home from "@/components/Home.vue";
-import sigunup from "@/components/New.vue";
+import signup from "@/components/New.vue";
 
 import store from "@/store/index.js"
 
@@ -31,6 +32,11 @@ const routes = [
     }
   },
   {
+    path: "/logout",
+    name: "Logout",
+    component: logout,
+  },
+  {
     path: "/home",
     name: "Home",
     component: home,
@@ -38,7 +44,7 @@ const routes = [
   {
     path: "/new",
     name: "New",
-    component: sigunup,
+    component: signup,
   },
 ];
 
@@ -49,7 +55,6 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  console.log(store.state.auth.access_token);
   if (to.matched.some(page => page.meta.isPublic) || store.state.auth.access_token) {
     // ログインが必要な画面 or ログイン済みの場合
     next()

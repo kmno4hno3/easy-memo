@@ -4,7 +4,7 @@ module Api
       skip_before_action :authenticate_user_from_token!
 
       # POST /api/v1/login
-      def create
+      def login
         # 送られてきたemailのユーザー情報を取得
         @user = User.find_for_database_authentication(email: user_param[:email])
         # emailがない場合
@@ -18,6 +18,9 @@ module Api
           # パスワードが正しくない場合
           invalid_password
         end
+      end
+
+      def logout
       end
 
       private

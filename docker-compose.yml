@@ -47,10 +47,10 @@ services:
       context: .
       dockerfile: ./vue/Dockerfile
     container_name: myapp-front
-    ports:
-       - '8080:8080'
+    # ports:
+    #    - '8080:8080'
     volumes:
-      - ./vue:/app
+      - ./vue:/app:cached # cached(オプション)
     stdin_open: true
     tty: true
     command: sh -c "cd assets && npm install && npm run serve" # ここのコメントアウトを外す。

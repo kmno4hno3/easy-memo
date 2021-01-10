@@ -36,7 +36,7 @@ export default {
     destroy({ commit, dispatch }, data) {
       dispatch(
         'http/delete',
-        { url: '/auth', data },
+        { url: '/api/v1/logout', data },
         { root: true }
       ).then(res => {
         console.log("resres");

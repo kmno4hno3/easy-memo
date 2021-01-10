@@ -35,11 +35,16 @@ export default {
       return this.$store.state.auth.token
     }
   },
+  created: function(){
+    if (this.$store.state.auth.access_token){
+      this.$router.push('/')
+    }
+  },
   // watch: {
   //   token () {
   //     this.$router.push('/')
   //   }
   // }
-};
+}
 </script>
 

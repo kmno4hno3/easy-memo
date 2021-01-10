@@ -1,33 +1,36 @@
 <template>
-  <a v-on:click="logout()">Logout</a>
+  <div>
+    <button v-on:click="logout()">Logout</button>
+  </div>
 </template>
 
 <script>
-import axios from "../../util/axios";
-
 export default {
-  name: "logout",
+  data() {
+    return {
+      email: "",
+      password: "",
+    };
+  },
   methods: {
-    async logout() {
-      // const self = this;
-      const result = await axios.post("/api/logout").catch((e) => {
-        console.error(e);
+    logout() {
+      this.$store.dispatch("auth/destroy", {
+        user: {
+          email: this.email,
+          password: this.password,
+        },
       });
-
-      if(!result){
-        this.message = "エラー";
-        return;
-      }
-      if(!result.data){
-        this.message = "エラー";
-        return;
-      }
-
-      if(result.data.state){
-        // 結果を基にページ遷移
-        this.$router.push("/");
-      }
     },
   },
+  computed: {
+    token() {
+      return this.$store.state.auth.token;
+    },
+  },
+  // watch: {
+  //   token () {
+  //     this.$router.push('/')
+  //   }
+  // }
 };
 </script>
