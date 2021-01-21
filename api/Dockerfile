@@ -2,10 +2,11 @@ FROM ruby:2.7.1
 
 # リポジトリを更新し依存モジュールをインストール
 RUN apt-get update -qq && \
-    apt-get install -y build-essential \        
+    apt-get install -y build-essential \     
                        nodejs \
-   && rm -rf /var/lib/apt/lists/* 
-
+                       vim less \
+                       graphviz \
+   && rm -rf /var/lib/apt/lists/* \
 # ルート直下にwebappという名前で作業ディレクトリを作成（コンテナ内のアプリケーションディレクトリ）
 RUN mkdir /app
 ENV APP_ROOT /app
