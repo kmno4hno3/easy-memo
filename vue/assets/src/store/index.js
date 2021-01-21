@@ -5,6 +5,7 @@ import createPersistentedState from 'vuex-persistedstate' // ブラウザリロ�
 
 import auth from '@/store/modules/auth.js'
 import http from '@/store/modules/http.js'
+import user from '@/store/modules/user.js'
 
 Vue.use(Vuex)
 
@@ -12,10 +13,12 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   modules: {
     auth,
-    http
+    user,
+    http,
   },
   plugins: [createPersistentedState({
     key: 'example',
+    paths: ['auth'],
     storage: window.sessionStorage
   })]
 })

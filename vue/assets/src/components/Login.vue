@@ -2,49 +2,57 @@
   <div class="login">
     login
     <div>
-      <input type="text" v-model="email" placeholder="メールアドレス" /><br />
-      <input type="text" v-model="password" placeholder="パスワード" /><br />
-      <button v-on:click="login()">LOGIN</button>
+      <v-form>
+        <v-text-field
+          v-model="email"
+          :counter="10"
+          label="メールアドレス"
+          required
+        ></v-text-field>
+        <v-text-field
+          v-model="password"
+          :counter="10"
+          label="パスワード"
+          required
+        ></v-text-field>
+        <v-btn elevation="2" v-on:click="login()">LOGIN</v-btn>
+      </v-form>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  data(){
+  data() {
     return {
       email: "",
       password: "",
-    }
+    };
   },
   methods: {
-    login(){
-     this.$store.dispatch(
-       'auth/create',
-       {
-          'user': {
-            email: this.email,
-            password: this.password
-          }
-       }
-     )
-    }
+    login() {
+      this.$store.dispatch("auth/create", {
+        email: this.email,
+        password: this.password,
+      });
+    },
   },
   computed: {
-    token(){
-      return this.$store.state.auth.token
+    token() {
+      return this.$store.state.auth.accessToken;
+    },
+  },
+  created: function () {
+    if (this.$store.state.auth.accessToken) {
+      this.$router.push("/");
     }
   },
-  created: function(){
-    if (this.$store.state.auth.access_token){
-      this.$router.push('/')
-    }
+  watch: {
+    token() {
+      console.log("watch");
+      this.$router.push("/");
+    },
   },
-  // watch: {
-  //   token () {
-  //     this.$router.push('/')
-  //   }
-  // }
-}
+};
 </script>
 

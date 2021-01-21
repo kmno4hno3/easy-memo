@@ -45,6 +45,9 @@ const routes = [
     path: "/new",
     name: "New",
     component: signup,
+    meta: {
+      isPublic: true
+    }
   },
 ];
 
@@ -55,7 +58,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(page => page.meta.isPublic) || store.state.auth.access_token) {
+  if (to.matched.some(page => page.meta.isPublic) || store.state.auth.accessToken) {
     // ログインが必要な画面 or ログイン済みの場合
     next()
   } else {

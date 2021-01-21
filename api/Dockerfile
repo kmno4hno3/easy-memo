@@ -5,6 +5,7 @@ RUN apt-get update -qq && \
     apt-get install -y build-essential \     
                        nodejs \
                        vim less \
+                       graphviz \
    && rm -rf /var/lib/apt/lists/* \
 # ルート直下にwebappという名前で作業ディレクトリを作成（コンテナ内のアプリケーションディレクトリ）
 RUN mkdir /app

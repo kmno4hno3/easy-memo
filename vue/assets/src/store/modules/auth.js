@@ -2,51 +2,48 @@ export default {
   namespaced: true,
   // 状態(データの定義)
   state: {
-    userId: '',
-    access_token: ''
+    accessToken: "",
+    client: "",
+    expiry: "",
+    uid: "",
+    id: "",
   },
   // stateの変更
   mutations: {
-    create (state, data) {
-      state.userId = data.user_id
-      state.access_token = data.access_token
-      console.log(state);
+    create(state, data) {
+      state.accessToken = data.headers["access-token"];
+      state.client = data.headers["client"];
+      state.expiry = data.headers["expiry"];
+      state.uid = data.headers["uid"];
+      state.id = data.data.data["id"];
     },
-    // 
+    //
     destroy(state) {
-      state.userId = ''
-      state.access_token = ''
+      state.accessToken = "";
+      state.client = "";
+      state.expiry = "";
+      state.uid = "";
+      state.id = "";
     },
   },
   // mutationsをコミットする
   actions: {
     create({ commit, dispatch }, data) {
-      console.log("auth");
-      dispatch(
-        'http/post',
-        { url: '/api/v1/login', data, error: 'message.unauthorized' },
-        { root: true }
-      ).then(res => {
-        console.log("=======");
-        console.log(res);
-        commit('create', res.data)
-      })
-        .catch(err => err)
+      dispatch("http/post", { url: "/api/v1/sign_in", data }, { root: true })
+        .then((res) => {
+          commit("create", res);
+        })
+        .catch((err) => err);
     },
-    destroy({ commit, dispatch }, data) {
-      dispatch(
-        'http/delete',
-        { url: '/api/v1/logout', data },
-        { root: true }
-      ).then(res => {
-        console.log("resres");
-        console.log(res.data);
-        commit('create', res.data);
-      })
-        .catch(err => err)
+    destroy({ commit, dispatch }) {
+      dispatch("http/delete", { url: "/api/v1/sign_out" }, { root: true })
+        .then((res) => {
+          commit("create", res);
+        })
+        .catch((err) => err)
         // logout anyway ...
         // .finally(res => commit('destroy'))
-        .finally(commit('destroy'))
-    }
-  }
-}
+        .finally(commit("destroy"));
+    },
+  },
+};

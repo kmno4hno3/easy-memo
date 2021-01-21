@@ -1,12 +1,10 @@
 Rails.application.routes.draw do
-  # デフォルトのアクションを削除している?
-  devise_for :users, only: []
+  mount_devise_token_auth_for 'User', at: '/api/v1/'
 
   namespace :api do
-    namespace :v1, defaults: { format: :json } do
-      resource :login, only: [:login], controller: :sessions
-      resource :logout, only: [:logout], controller: :sessions
-      resources :users, only: [:index, :show, :create]
+    namespace :v1 do
+      resources :users
     end
   end
+
 end

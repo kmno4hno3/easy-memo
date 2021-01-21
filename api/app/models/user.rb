@@ -1,15 +1,9 @@
-class User < ApplicationRecord
+# frozen_string_literal: true
+
+class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :registerable, :validatable
-
-  after_create :update_access_token!
-
-  validates :email, presence: true
-
-  def update_access_token!
-    # friendly_token:ランダムな20文字のトークンを生成
-    self.access_token = "#{self.id}:#{Devise.friendly_token}"
-    save
-  end
+  # :confirmable, :lockable, :timeoutable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :trackable, :validatable
+  include DeviseTokenAuth::Concerns::User
 end

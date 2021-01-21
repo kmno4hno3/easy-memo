@@ -1,36 +1,33 @@
 <template>
   <div>
-    <button v-on:click="logout()">Logout</button>
+    <v-btn elevation="2" v-on:click="logout()">Logout</v-btn>
   </div>
 </template>
 
 <script>
 export default {
-  data() {
-    return {
-      email: "",
-      password: "",
-    };
-  },
   methods: {
     logout() {
-      this.$store.dispatch("auth/destroy", {
-        user: {
-          email: this.email,
-          password: this.password,
-        },
-      });
+      this.$store.dispatch("auth/destroy");
     },
   },
   computed: {
     token() {
-      return this.$store.state.auth.token;
+      console.log("computed");
+      return this.$store.state.auth.accessToken;
     },
   },
-  // watch: {
-  //   token () {
-  //     this.$router.push('/')
-  //   }
-  // }
+  created: function () {
+    if (!this.$store.state.auth.accessToken) {
+      console.log("created_logout");
+      this.$router.push("/login");
+    }
+  },
+  watch: {
+    token() {
+      console.log("watch");
+      this.$router.push("/login");
+    },
+  },
 };
 </script>
