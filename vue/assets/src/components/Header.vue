@@ -19,8 +19,8 @@
         <v-tabs v-model="tab" align-with-title>
           <v-tabs-slider color="yellow"></v-tabs-slider>
 
-          <v-tab v-for="item in items" :key="item.name">
-            <router-link :to="item.path">{{ item.name }}</router-link>
+          <v-tab v-for="item in items" :key="item.name" :to="item.path">
+            {{ item.name }}
           </v-tab>
         </v-tabs>
       </template>
