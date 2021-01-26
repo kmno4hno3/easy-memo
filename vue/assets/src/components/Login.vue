@@ -17,6 +17,7 @@
         ></v-text-field>
         <v-btn elevation="2" v-on:click="login()">LOGIN</v-btn>
       </v-form>
+      <v-btn elevation="2" v-on:click="twitter_login()">Twitter</v-btn>
     </div>
   </div>
 </template>
@@ -36,6 +37,9 @@ export default {
         password: this.password,
       });
     },
+    twitter_login (){
+      this.$store.dispatch("auth/oauth");
+    }
   },
   computed: {
     token() {
