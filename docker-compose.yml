@@ -14,9 +14,9 @@ services:
       - db
     volumes:
       - ./api:/app
-      - bundle:/usr/local/bundle
+      - ./api/log:/app/log
+      - ./api/bundle:/usr/local/bundle
       - tmp-data:/app/tmp
-      - log-data:/app/log
     tty: true # ポート待ち受けにしてない場合でもコンテナが終了しないように
     stdin_open: true # ttyとセット  
   db:
@@ -55,7 +55,5 @@ services:
     tty: true
     command: sh -c "cd assets && npm install && npm run serve" # ここのコメントアウトを外す。
 volumes:
-  bundle:
   tmp-data:
-  log-data:
   db-data:

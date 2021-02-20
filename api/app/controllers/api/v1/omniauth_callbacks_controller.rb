@@ -1,46 +1,50 @@
-class Api::V1::OmniauthCallbacksController < ApplicationController
+class Api::V1::OmniauthCallbacksController < DeviseTokenAuth::OmniauthCallbacksController
   skip_before_action :skip_session
+  before_action :test
+
+  def test
+    p "テスト"
+  end
 
   def redirect_callbacks
+    p "リダイレクト"
     super
   end
+
   def omniauth_success
+    p "成功"
     super
-    update_auth_header
   end
+
   def omniauth_failure
+    p "失敗"
     super
   end
 
   protected
-    def get_resource_from_auth_hash
+  def get_redirect_route(devise_mapping)
+    p "get_redirect_route"
+    path = "#{Devise.mappings[devise_mapping.to_sym].fullpath}#{params[:provider]}/callback"
+    p path
+      klass = request.scheme == 'https' ? URI::HTTPS : URI::HTTP
+      redirect_route = klass.build(host: request.host, port: request.port, path: path).to_s
+    # super
+  end
+
+  def assign_provider_attrs(user, auth_hash)
+    p "1"
+    case auth_hash['provider']
+    when 'twitter'
+      user.assign_attributes({
+        nickname: auth_hash['info']['nickname'],
+        name: auth_hash['info']['name'],
+        image: auth_hash['info']['image'],
+        email: auth_hash['info']['email']
+      })
+    else
+      p "2"
       super
-        # @resource.credentials = auth_hash["credentials"]
-      clean_resource
     end
+  end
 
-    def render_data_or_redirect(message, data, user_data = {})
-      if Rails.env.production?
-        if ['inAppBrowser', 'newWindow'].include?(omniauth_window_type)
-          render_data(message, user_data.merge(data))
-        elsif auth_origin_url
-          redirect_to DeviseTokenAuth::Url.generate(auth_origin_url, data.merge(blank: true))
-        else
-          fallback_render data[:error] || 'An error occurred'
-        end
-      else
-        # @resource.credentials = auth_hash["credentials"]
-
-        # わかりやすい様に開発時はjsonとして結果を返す
-        render json: @resource, status: :ok
-      end
-    end
-
-    def clean_resource
-      @resource.name = strip_emoji(@resource.name)
-      @resource.nickname = strip_emoji(@resource.nickname)
-    end
-    def strip_emoji(str)
-      str.encode('SJIS', 'UTF-8', invalid: :replace, undef: :replace, replace: '').encode('UTF-8')
-    end
 end
