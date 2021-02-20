@@ -38,6 +38,8 @@ export default {
     oauth({ commit, dispatch }){
       dispatch("http/get", { url: "/api/v1/twitter" }, { root: true })
       .then((res) => {
+        console.log("1111");
+        console.log(res);
         commit("create", res);
       })
       .catch((err) => err);

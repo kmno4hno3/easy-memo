@@ -17,7 +17,9 @@
         ></v-text-field>
         <v-btn elevation="2" v-on:click="login()">LOGIN</v-btn>
       </v-form>
-      <v-btn elevation="2" v-on:click="twitter_login()">Twitter</v-btn>
+      <v-btn elevation="2">
+        <a v-bind:href="twitter_url">Twitter</a>
+      </v-btn>
     </div>
   </div>
 </template>
@@ -28,6 +30,7 @@ export default {
     return {
       email: "",
       password: "",
+      twitter_url: "/api/v1/twitter",
     };
   },
   methods: {
@@ -37,9 +40,6 @@ export default {
         password: this.password,
       });
     },
-    twitter_login (){
-      this.$store.dispatch("auth/oauth");
-    }
   },
   computed: {
     token() {
@@ -60,3 +60,8 @@ export default {
 };
 </script>
 
+<style>
+a {
+  text-decoration: none;
+}
+</style>
