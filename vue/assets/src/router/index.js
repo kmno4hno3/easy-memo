@@ -7,6 +7,7 @@ import login from "@/components/Login.vue";
 import logout from "@/components/Logout.vue";
 import home from "@/components/Home.vue";
 import signup from "@/components/New.vue";
+import callback from "@/components/Callback.vue";
 
 import store from "@/store/index.js"
 
@@ -45,6 +46,14 @@ const routes = [
     path: "/new",
     name: "New",
     component: signup,
+    meta: {
+      isPublic: true
+    }
+  },
+  {
+    path: "/twitter/callback",
+    name: "TwitterCallback",
+    component: callback,
     meta: {
       isPublic: true
     }

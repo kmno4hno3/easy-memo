@@ -30,7 +30,7 @@ export default {
     return {
       email: "",
       password: "",
-      twitter_url: "/api/v1/twitter",
+      twitter_url: "/api/v1/twitter?auth_origin_url=" + location.origin + "/twitter/callback",
     };
   },
   methods: {
@@ -47,6 +47,7 @@ export default {
     },
   },
   created: function () {
+    console.log("created");
     if (this.$store.state.auth.accessToken) {
       this.$router.push("/");
     }
