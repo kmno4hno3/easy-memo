@@ -4,35 +4,55 @@
 
 <script>
 export default {
-  async fetch({ query, store, $axios, redirect, app }) {
-  console.log("fetch")
-   const authHeaders = {
-     'access-token': query.auth_token,
-     'client': query.client_id,
-     'uid': query.uid,
-     'expiry': query.expiry,
-   }
-
-   store.commit('auth', authHeaders)
-
-   const { data } = await $axios.$get('/auth/validate_token')
-   store.commit('user', data)
-
-   const session = {
-     tokens: authHeaders,
-     user: data
-   }
-
-   app.$cookies.set('session', session, {
-     path: '/',
-     maxAge: 60 * 60 * 24 * 7
-   })
-   redirect(301, '/')
- },
-  created() {
-    let url = location.href;
-    console.log(url);
-    console.log("callback")
+  namespaced: true,
+  // 状態(データの定義)
+  state: {
+    accessToken: "",
+    client: "",
+    expiry: "",
+    uid: "",
+    id: "",
   },
-}
+  // stateの変更
+  mutations: {
+    create(state, data) {
+      state.accessToken = data["access-token"];
+      state.client = data["client"];
+      state.expiry = data["expiry"];
+      state.uid = data["uid"];
+      state.id = data["id"];
+    },
+  },
+  created() {
+    let queryString = window.location.search;
+    let queryObject = new Object();
+    if (queryString) {
+      queryString = queryString.substring(1);
+      let params = queryString.split("&");
+
+      for (let i = 0; i < params.length; i++) {
+        let elem = params[i].split("=");
+        let key = decodeURIComponent(elem[0]);
+        let value = decodeURIComponent(elem[1]);
+
+        queryObject[key] = value;
+      }
+      console.log("auth_token");
+      console.log(queryObject["auth_token"]);
+    }
+    console.log("callback");
+
+    let json = {
+      "access-token": queryObject["auth_token"],
+      "client": queryObject["client"],
+      "expiry": queryObject["expiry"],
+      "uid": queryObject["uid"],
+      "id": queryObject["id"],
+    };
+
+    console.log(this.$store);
+    this.$store.commit("create", json);
+
+  },
+};
 </script>

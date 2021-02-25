@@ -35,14 +35,10 @@ export default {
         })
         .catch((err) => err);
     },
-    oauth({ commit, dispatch }){
-      dispatch("http/get", { url: "/api/v1/twitter" }, { root: true })
-      .then((res) => {
-        console.log("1111");
-        console.log(res);
-        commit("create", res);
-      })
-      .catch((err) => err);
+    oauth({ commit }, data){
+      console.log("1111");
+      console.log(data);
+      commit("create", data);
     },
     destroy({ commit, dispatch }) {
       dispatch("http/delete", { url: "/api/v1/sign_out" }, { root: true })
