@@ -27,6 +27,7 @@ export default {
       "uid": queryObject["uid"],
       "id": queryObject["id"],
     };
+    console.log(json);
 
     this.$store.dispatch("auth/oauth_create", json);
   }

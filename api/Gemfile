@@ -30,6 +30,7 @@ gem 'devise'
 gem 'devise_token_auth'
 gem 'omniauth'
 gem 'omniauth-twitter'
+gem 'omniauth-line'
 
 gem 'dotenv-rails'
 gem 'active_model_serializers'

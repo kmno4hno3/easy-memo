@@ -51,8 +51,8 @@ const routes = [
     }
   },
   {
-    path: "/twitter/callback",
-    name: "TwitterCallback",
+    path: "/callback",
+    name: "Callback",
     component: callback,
     meta: {
       isPublic: true
