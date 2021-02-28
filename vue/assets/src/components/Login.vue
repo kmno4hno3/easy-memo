@@ -47,14 +47,12 @@ export default {
     },
   },
   created: function () {
-    console.log("created");
     if (this.$store.state.auth.accessToken) {
       this.$router.push("/");
     }
   },
   watch: {
     token() {
-      console.log("watch");
       this.$router.push("/");
     },
   },

@@ -4,25 +4,6 @@
 
 <script>
 export default {
-  namespaced: true,
-  // 状態(データの定義)
-  state: {
-    accessToken: "",
-    client: "",
-    expiry: "",
-    uid: "",
-    id: "",
-  },
-  // stateの変更
-  mutations: {
-    create(state, data) {
-      state.accessToken = data["access-token"];
-      state.client = data["client"];
-      state.expiry = data["expiry"];
-      state.uid = data["uid"];
-      state.id = data["id"];
-    },
-  },
   created() {
     let queryString = window.location.search;
     let queryObject = new Object();
@@ -37,22 +18,17 @@ export default {
 
         queryObject[key] = value;
       }
-      console.log("auth_token");
-      console.log(queryObject["auth_token"]);
     }
-    console.log("callback");
 
     let json = {
       "access-token": queryObject["auth_token"],
-      "client": queryObject["client"],
+      "client": queryObject["client_id"],
       "expiry": queryObject["expiry"],
       "uid": queryObject["uid"],
       "id": queryObject["id"],
     };
 
-    console.log(this.$store);
-    this.$store.commit("create", json);
-
-  },
-};
+    this.$store.dispatch("auth/oauth_create", json);
+  }
+}
 </script>

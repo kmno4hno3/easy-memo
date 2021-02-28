@@ -8,7 +8,6 @@
 export default {
   created: function () {
     if (!this.$store.state.auth.accessToken) {
-      console.log("created_logout");
       this.$router.push("/login");
     }
   },

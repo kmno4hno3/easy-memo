@@ -13,19 +13,16 @@ export default {
   },
   computed: {
     token() {
-      console.log("computed");
       return this.$store.state.auth.accessToken;
     },
   },
   created: function () {
     if (!this.$store.state.auth.accessToken) {
-      console.log("created_logout");
       this.$router.push("/login");
     }
   },
   watch: {
     token() {
-      console.log("watch");
       this.$router.push("/login");
     },
   },

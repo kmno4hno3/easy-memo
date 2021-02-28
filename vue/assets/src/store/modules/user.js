@@ -5,8 +5,6 @@ export default {
   },
   mutations: {
     show(state, data) {
-      // state.uid = data.headers["uid"];
-      // console.log(data.data["email"]);
       state.email = data.data["email"]
     },
   },

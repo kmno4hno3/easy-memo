@@ -11,11 +11,11 @@ export default {
   // stateの変更
   mutations: {
     create(state, data) {
-      state.accessToken = data.headers["access-token"];
-      state.client = data.headers["client"];
-      state.expiry = data.headers["expiry"];
-      state.uid = data.headers["uid"];
-      state.id = data.data.data["id"];
+      state.accessToken = data["access-token"];
+      state.client = data["client"];
+      state.expiry = data["expiry"];
+      state.uid = data["uid"];
+      state.id = data["id"];
     },
     //
     destroy(state) {
@@ -31,13 +31,12 @@ export default {
     create({ commit, dispatch }, data) {
       dispatch("http/post", { url: "/api/v1/sign_in", data }, { root: true })
         .then((res) => {
-          commit("create", res);
+          let mergedRes = Object.assign(res.data.data, res.headers)
+          commit("create", mergedRes);
         })
         .catch((err) => err);
     },
-    oauth({ commit }, data){
-      console.log("1111");
-      console.log(data);
+    oauth_create({ commit }, data){
       commit("create", data);
     },
     destroy({ commit, dispatch }) {

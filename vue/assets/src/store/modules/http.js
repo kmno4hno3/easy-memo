@@ -20,8 +20,6 @@ export default {
         timeout: 15000,
       };
 
-      console.log(options);
-
       return axios(options)
         .then((res) => res)
         .catch((err) => {

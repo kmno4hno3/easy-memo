@@ -29,6 +29,8 @@ class Api::V1::OmniauthCallbacksController < DeviseTokenAuth::OmniauthCallbacksC
 
     sign_in(:user, @resource, store: false, bypass: false)
 
+    @resource.save!
+
     # # 動作確認用にユーザ情報を保存できたらjsonをそのまま返す処理
     # if @resource.save!
     #   # update_token_authをつけることでレスポンスヘッダーに認証情報を付与できる。
@@ -85,6 +87,7 @@ class Api::V1::OmniauthCallbacksController < DeviseTokenAuth::OmniauthCallbacksC
     @auth_params = {
       auth_token: @token.token,
       client_id:  @token.client,
+      id:         @resource.id,
       uid:        @resource.uid,
       expiry:     @token.expiry,
       config:     @config
@@ -121,8 +124,6 @@ class Api::V1::OmniauthCallbacksController < DeviseTokenAuth::OmniauthCallbacksC
       render_data(message, user_data.merge(data))
 
     elsif auth_origin_url # default to same-window implementation, which forwards back to auth_origin_url
-      update_auth_header
-      p auth_origin_url
       # build and redirect to destination url
       redirect_to DeviseTokenAuth::Url.generate(auth_origin_url, data.merge(blank: true))
     else
@@ -150,7 +151,7 @@ class Api::V1::OmniauthCallbacksController < DeviseTokenAuth::OmniauthCallbacksC
       extra_params = whitelisted_params
       @resource.assign_attributes(extra_params) if extra_params
     end
-
+    
     @resource
   end
 

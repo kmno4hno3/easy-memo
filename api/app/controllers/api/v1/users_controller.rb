@@ -4,8 +4,11 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def show
-    p "show呼び出し"
     @user = User.find(params[:id])
     render json: @user, serializer: Api::V1::UsersSerializer
   end
+
+  # def user_params
+  #   params.require(:id)
+  # end
 end
