@@ -26,41 +26,34 @@ class LinebotsController < ActionController::Base
     events.each do |event|
       case event
       when Line::Bot::Event::Message
+        # メッセージの場合
         case event.type
         when Line::Bot::Event::MessageType::Text
-          msg = event.message['text']
-          length = msg.length
+          message = {}
 
-          # p TestMessage.send
-
-          # message = {
-          #   type: "text",
-          #   text: length
-          # }
-
-          message = {
-            type: "location",
-            title: "my location",
-            address: "〒160-0022 東京都新宿区新宿４丁目１−６", 
-            latitude: 35.688806,
-            longitude: 139.701739  
-        }
-        message = {}
-
-        File.open(Rails.root + 'app/services/line_bot/messages/json/imagemap.json') do |file|
-          hash = JSON.load(file)
-          message =  hash
-        end
+          File.open(Rails.root + 'app/services/line_bot/messages/json/text.json') do |file|
+            hash = JSON.load(file)
+            hash['text'] = event.message['text'].length
+            message = hash
+          end
 
           client.reply_message(event['replyToken'], message)
-        when Line::Bot::Event::MessageType::Image, Line::Bot::Event::MessageType::Video
-          response = client.get_message_content(event.message['id'])
-          tf = Tempfile.open("content")
-          tf.write(response.body)
+        else
+          message = {
+            type: "text",
+            text: "対応していないメッセージです"
+          }
+          client.reply_message(event['replyToken'], message)
         end
+      when Line::Bot::Event::Postback
+        # ポストバックの場合
+        p "postback"
+        message = {
+          type: "text",
+          text: "postback"
+        }
+        client.reply_message(event['replyToken'], message)
       end
     end
-    "OK"
   end
-
 end
