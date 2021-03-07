@@ -1,8 +1,9 @@
 # class LinebotsController < ApplicationController
 class LinebotsController < ActionController::Base
   require 'line/bot'
-  # require './app/services/line_bot/messages/test'
   require 'json'
+  require 'net/http'
+  require 'uri'
 
   # callbackアクションのCSRFトークン認証を無効
   protect_from_forgery :except => [:callback]
@@ -29,15 +30,41 @@ class LinebotsController < ActionController::Base
         # メッセージの場合
         case event.type
         when Line::Bot::Event::MessageType::Text
-          message = {}
+          case event.message['text']
+          when "Qiita"
+            p "qiita"
 
-          File.open(Rails.root + 'app/services/line_bot/messages/json/text.json') do |file|
-            hash = JSON.load(file)
-            hash['text'] = event.message['text'].length
-            message = hash
+            access_token = ENV.fetch("QIITA_ACCESS_TOKEN")
+            get_items_uri = 'https://qiita.com/api/v2/items'
+            query = 'created:>=2018-04-01'
+            page = 1
+            per_page = 100
+
+            uri = URI.parse(get_items_uri)
+            uri.query = URI.encode_www_form({ query: query, per_page: per_page, page: page })
+            req = Net::HTTP::Get.new(uri.request_uri)
+            req['Authorization'] = "Bearer #{access_token}"
+
+            http = Net::HTTP.new(uri.host, uri.port)
+            http.use_ssl = true
+            res = http.request(req)
+
+            p "~~~"
+            p JSON.parse(res.body)
+            p "~~~"           
+
+            
+          else
+            message = {}
+
+            File.open(Rails.root + 'app/services/line_bot/messages/json/text.json') do |file|
+              hash = JSON.load(file)
+              hash['text'] = event.message['text'].length
+              message = hash
+            end
+
+            client.reply_message(event['replyToken'], message)
           end
-
-          client.reply_message(event['replyToken'], message)
         else
           message = {
             type: "text",
