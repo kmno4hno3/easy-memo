@@ -36,9 +36,14 @@ class LinebotsController < ActionController::Base
 
             access_token = ENV.fetch("QIITA_ACCESS_TOKEN")
             get_items_uri = 'https://qiita.com/api/v2/items'
-            query = 'created:>=2018-04-01'
-            page = 1
-            per_page = 100
+            user_id = event['source']['userId']
+
+            # クエリーパラメーター
+            before_yesterday_time = (Time.now - 60 * 60 * 24).strftime("%Y-%m-%d")
+            stocks = 3
+            query = "created:>=#{before_yesterday_time} stocks:>#{stocks}"
+            page = 1 # 取得開始ページ
+            per_page = 100 # 1回のAPIコールで取得できる件数
 
             uri = URI.parse(get_items_uri)
             uri.query = URI.encode_www_form({ query: query, per_page: per_page, page: page })
@@ -48,12 +53,23 @@ class LinebotsController < ActionController::Base
             http = Net::HTTP.new(uri.host, uri.port)
             http.use_ssl = true
             res = http.request(req)
+            items = JSON.parse(res.body)
 
-            p "~~~"
-            p JSON.parse(res.body)
-            p "~~~"           
+            message = []
+            count = 0
+            items.each do |item|
+              message.push({
+                "type":"text",
+                "text":"#{item['title']}\n#{item['url']}"
+              })
+              if count > 4
+                break
+              end
+              count += 1
+            end
+            # p message.length
 
-            
+            client.reply_message(event['replyToken'], message)
           else
             message = {}
 
