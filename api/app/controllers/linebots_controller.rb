@@ -59,8 +59,8 @@ class LinebotsController < ActionController::Base
             count = 0
             items.each do |item|
               message.push({
-                "type":"text",
-                "text":"#{item['title']}\n#{item['url']}"
+                type: "text",
+                text: "#{item['title']}\n#{item['url']}"
               })
               if count > 4
                 break
