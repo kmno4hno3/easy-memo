@@ -8,4 +8,6 @@ Rails.application.routes.draw do
     end
   end
 
+  post '/api/callback' => 'linebots#callback'
+
 end
